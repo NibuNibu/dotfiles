@@ -1,15 +1,23 @@
 * {
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: "JetBrainsMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK JP", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
     font-size: 13px;
+    min-height: 0;
 }
 
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.5);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    color: #ffffff;
-    transition-property: background-color;
-    transition-duration: .5s;
+    background: #282828;
+    color: #ebdbb2;
+    border: 2px solid #3c3836;
+    border-radius: 14px;
+}
+
+#waybar{
+    margin: 0;
+}
+
+#workspaces {
+    margin: 0 4px;
 }
 
 window#waybar.hidden {
