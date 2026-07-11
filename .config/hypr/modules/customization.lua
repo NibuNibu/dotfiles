@@ -2,16 +2,22 @@
 ---- LOOK AND FEEL ----
 -----------------------
 
+hl.layer_rule({
+    match = {namespace = "waybar"},
+    blur = false
+
+})
+
 -- Refer to https://wiki.hypr.land/Configuring/Basics/Variables/
 hl.config({
     general = {
-        gaps_in  = 8,
-        gaps_out = 16,
+        gaps_in  = 4,
+        gaps_out = 8,
 
         border_size = 2,
 
         col = {
-            active_border   = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
+            active_border   = { colors = {"rgba(c1683aee)", "rgba(7a9b6eee)"}, angle = 45 },
             inactive_border = "rgba(595959aa)",
         },
 
@@ -40,10 +46,12 @@ hl.config({
         },
 
         blur = {
-            enabled   = true,
-            size      = 10,
-            passes    = 3,
-            vibrancy  = 0.1696,
+            enabled           = true,
+            xray              = true,
+            size              = 10,
+            passes            = 3,
+            vibrancy          = 0.1696,
+            new_optimizations = true,
         },
     },
 
