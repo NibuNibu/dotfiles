@@ -13,13 +13,14 @@
 
     // Choose the order of the modules
     "modules-left": [
+        "custom/launcher",
         "clock",
         "mpd",  // music player daemon
         "pulseaudio"
         //"custom/media"
     ],
     "modules-center": [
-        "hyprland/workspaces"
+        "ext/workspaces"
     ],
     "modules-right": [
         "temperature",
@@ -31,9 +32,9 @@
     ],
 
     // Modules configuration
-    "hyprland/workspaces": {
+    "ext/workspaces": {
         "disable-scroll": true,
-        "on-click": "activate",
+        "on-click": "activate",     // possible bug with hyprland/workspaces -> changed all mentions to ext/...
         "format": "{icon}",
         "format-icons": {
             "1":  "一",
@@ -50,6 +51,7 @@
             //"active":  "",
             //"urgent":  ""
         },
+        "sort-by-id": true,
         "persistent-workspaces": {
             "*": 5
         }
@@ -82,6 +84,7 @@
     },
     "clock": {
         // "timezone": "America/New_York",
+        "format": "{:%H:%M}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },
@@ -146,7 +149,7 @@
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
-    }
+    },
     //"custom/media": {
     //    "format": "{icon} {text}",
     //    "return-type": "json",
@@ -159,5 +162,9 @@
     //    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
     //    // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     //}
-
+    "custom/launcher": {
+        "format": "󰣇",
+        "tooltip": false,
+        "on-click": "pgrep -x rofi > /dev/null && pkill -x rofi || rofi -show drun &"
+    }
 }

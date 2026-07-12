@@ -52,9 +52,24 @@ window#waybar {
     border: 2px solid #fb4934;
 }
 
-#workspaces button:hover {
-    background: rgba(235, 219, 178, 0.08);
-    border-radius: 8px;
+/* doesnt work with ext, mby ill do workaround later */
+/* #workspaces button.empty {    
+    opacity: 0.2;
+}
+
+#workspaces button.empty.active {
+    opacity: 1.0;
+    color: red;
+} */
+
+#workspaces button:hover { /* placeholder style */
+    opacity: 0.73;
+    background: #b98562;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-color: #fabd2f;
+    box-shadow: none;
+    outline: none;
 }
 
 #clock,
@@ -102,4 +117,16 @@ window#waybar {
 #battery.critical:not(.charging) {
     color: #fb4934;
     background: #3c3836;
+}
+
+#custom-launcher {
+    padding: 0 8px;
+    background-color: rgba(60, 56, 54, 0.55);
+    border-top: 1px solid rgba(232, 220, 192, 0.15);
+    border-bottom: 1px solid rgba(232, 220, 192, 0.15);
+    border-left: 1px solid rgba(232, 220, 192, 0.15);
+    border-radius: 8px 0 0 8px;
+    margin-top: 8px;
+    margin-left: 16px;
+    color: #b8bb26;
 }
