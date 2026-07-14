@@ -5,7 +5,7 @@
 -- Set programs that you use
 local terminal    = "kitty"
 local fileManager = "dolphin"
-local menu        = "rofi -show drun &"
+local menu        = "pgrep -x rofi > /dev/null && pkill -x rofi || rofi -show drun &"
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -66,3 +66,6 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = tr
 
 -- Rofi closing thingy outside of the window, requires to download 'jq'
 hl.bind("mouse:272", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/rofiClickClose.sh"), { non_consuming = true })
+
+-- temporary bind to reload waybar
+hl.bind(mainMod .. "+ backspace", hl.dsp.exec_cmd("pkill waybar || waybar & disown"))

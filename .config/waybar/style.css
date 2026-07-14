@@ -1,15 +1,18 @@
 * {
     font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK JP", sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     min-height: 0;
 }
 
 window#waybar {
-    background: transparent;
+    background: rgba(50, 80, 63, 0.5);
     color: #e8dcc0;
     opacity: 1.0;
-    /*border: 2px solid #3c3836;
-    border-radius: 8px;*/
+    border: 2px solid #3c3836;
+    border-radius: 8px;
+    background-clip: padding-box;
+    box-shadow: #3c3836;
+    margin: 2px 4px;
 }
 
 /* aby zaoblení nebylo useknuté containerem */
@@ -17,13 +20,11 @@ window#waybar {
     margin: 0;
 }
 
-/* --------- CENTER REGION --------- */
-
 #workspaces {
     margin: 0 0 0 0;
     padding: 2 0px;
     color: #928374;
-    background: #243b2e;
+    background: transparent;
     opacity: 0.83;
     border: 2px solid transparent;
     border-radius: 8px;
@@ -41,7 +42,7 @@ window#waybar {
 
 #workspaces button.active {
     color: #c1683a;
-    opacity: 0.93;
+    opacity: 1.0;
     background: #e8dcc0;
     border: 2px solid #c1683a;
     background-clip: padding-box;
@@ -52,15 +53,9 @@ window#waybar {
     border: 2px solid #fb4934;
 }
 
-/* doesnt work with ext, mby ill do workaround later */
-/* #workspaces button.empty {    
-    opacity: 0.2;
+#workspaces button.empty {    
+    opacity: 0.5;
 }
-
-#workspaces button.empty.active {
-    opacity: 1.0;
-    color: red;
-} */
 
 #workspaces button:hover { /* placeholder style */
     opacity: 0.73;
@@ -87,6 +82,7 @@ window#waybar {
 #clock {
     color: #b8bb26;
     font-weight: bold;
+    padding: 4 4 16 4;
 }
 
 #cpu {
@@ -120,13 +116,10 @@ window#waybar {
 }
 
 #custom-launcher {
-    padding: 0 8px;
-    background-color: rgba(60, 56, 54, 0.55);
-    border-top: 1px solid rgba(232, 220, 192, 0.15);
-    border-bottom: 1px solid rgba(232, 220, 192, 0.15);
-    border-left: 1px solid rgba(232, 220, 192, 0.15);
-    border-radius: 8px 0 0 8px;
-    margin-top: 8px;
-    margin-left: 16px;
-    color: #b8bb26;
+    padding: 16 4 0 4;
+    color: #928374;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background-clip: padding-box;
+    margin: 2px 4px;
 }

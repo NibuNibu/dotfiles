@@ -1,40 +1,28 @@
 // -*- mode: jsonc -*-
 {
-    //"layer": "top", // Waybar at top layer
-    //"position": "top", // Waybar position (top|bottom|left|right)
-    
-    "margin-top": 8,
-    "margin-left": 16,
-    "margin-right": 16,
+    "layer": "top",
+    "position": "left",
+    "margin": "5 2 5 0",
+    "reload_style_on_change": true,
 
-    "height": 34, // Waybar height (to be removed for auto height)
-    "spacing": 4, // Gaps between modules (4px)
-
-
-    // Choose the order of the modules
+    // --------------- TOP OF THE BAR MODULES ---------------
     "modules-left": [
         "custom/launcher",
-        "clock",
-        "mpd",  // music player daemon
-        "pulseaudio"
-        //"custom/media"
-    ],
-    "modules-center": [
-        "ext/workspaces"
-    ],
-    "modules-right": [
-        "temperature",
-        "power-profiles-daemon",
-        "cpu",
-        "memory",
-        // "sway/language",
-        "battery"
+        "custom/updates",
+        "hyprland/workspaces",
+        "hyprland/submap",
+        "group/info"
     ],
 
-    // Modules configuration
-    "ext/workspaces": {
+    "custom/launcher": {
+        "format": "{:>3}零",
+        "tooltip": false,
+        "on-click": "pgrep -x rofi > /dev/null && pkill -x rofi || rofi -show drun &"
+    },
+
+    "hyprland/workspaces": {
         "disable-scroll": true,
-        "on-click": "activate",     // possible bug with hyprland/workspaces -> changed all mentions to ext/...
+        "on-click": "activate",     // possible bug with hyprland/workspaces -> its fixed in git release, but not last stable release, should work with that
         "format": "{icon}",
         "format-icons": {
             "1":  "一",
@@ -56,115 +44,434 @@
             "*": 5
         }
     },
-    "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-        "unknown-tag": "N/A",
-        "interval": 5,
-        "consume-icons": {
-            "on": " "
-        },
-        "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
-        },
-        "repeat-icons": {
-            "on": " "
-        },
-        "single-icons": {
-            "on": "1 "
-        },
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
+
+    "hyprland/submap": {
+        "format": "<b>󰇘</b>",
+        "max-length": 8,
+        "tooltip": true
     },
-    "clock": {
-        // "timezone": "America/New_York",
-        "format": "{:%H:%M}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
-    },
-    "cpu": {
-        "format": "{usage}% ",
-        "tooltip": false
-    },
-    "memory": {
-        "format": "{}% "
-    },
-    "temperature": {        // should be done outside of vm
-        "thermal-zone": 2,
-        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 80,
-        "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
+    
+    "group/info": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "custom/dmark",
+            "group/gcpu",
+            "memory",
+            "disk"
+        ]
     },
 
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 30,
-            "critical": 15
+        // -------- GROUP INFO MODULES --------
+        "custom/dmark": {
+            "format": "{:3}",
+            "tooltip": false
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+
+        "group/gcpu": {
+            "orientation": "inherit",
+            "modules": [
+                "custom/cpu-icon",
+                "custom/cputemp",
+                "cpu"
+            ]
+        },
+
+        "custom/cpu-icon": {
+            "format": "󰻠",
+            "tooltip": false
+        },
+
+        "custom/cputemp": {
+            "format": "{}",
+            "exec": "~/.config/waybar/bin/cputemp",
+            "interval": 10,
+            "return-type": "json"
+        },
+
+        "cpu": {
+            "format": "<b>{usage}󱉸</b>",
+            "on-click": "foot btop"
+        },
+
+        "memory": {
+            "format": "<b>  \n{:2}󱉸</b>"
+        },
+
+        "disk": {
+            "interval": 600,
+            "format": "<b> 󰋊 \n{percentage_used}󱉸</b>",
+            "path": "/"
+        },
+
+    // --------------- BOTTOM OF THE BAR MODULES ---------------
+    "modules-right": [
+        "group/brightness",
+        "group/sound",
+        "group/connection",
+        "group/together",
+        "tray",
+        "group/power"
+    ],
+    
+    "group/brightness": {
+      "orientation": "inherit",
+      "drawer": {
+        "transition-duration": 500,
+        "transition-left-to-right": false
+      },
+      "modules": [
+        "backlight",
+        "backlight/slider"
+      ]
     },
 
-    "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
-      }
-    },
-    "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
+        // -------- GROUP BRIGHTNESS MODULES --------
+        "backlight": {
+          "device": "intel_backlight",
+          "format": "{icon}",
+          "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "on-scroll-down": "brightnessctl s 5%-",
+          "on-scroll-up": "brightnessctl s +5%",
+          "tooltip": true,
+          "tooltip-format": "Brightness: {percent}% ",
+          "smooth-scrolling-threshold": 1
         },
-        "on-click": "pavucontrol"
+     
+        "backlight/slider": {
+          "min": 5,
+          "max": 100,
+          "orientation": "vertical",
+          "device": "intel_backlight"
+        },
+
+    "group/sound": {
+        "orientation": "inherit",
+        "modules": [
+            "group/audio",
+            "custom/notifications"
+        ]
     },
-    //"custom/media": {
-    //    "format": "{icon} {text}",
-    //    "return-type": "json",
-    //    "max-length": 40,
-    //    "format-icons": {
-    //        "spotify": "",
-    //        "default": "🎜"
-    //    },
-    //    "escape": true,
-    //    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-    //    // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    //}
-    "custom/launcher": {
-        "format": "󰣇",
-        "tooltip": false,
-        "on-click": "pgrep -x rofi > /dev/null && pkill -x rofi || rofi -show drun &"
-    }
+
+        // -------- GROUP SOUND MODULES --------
+        "group/audio": {
+            "orientation": "inherit",
+            "drawer": {
+                "transition-duration": 500,
+                "transition-left-to-right": false
+            },
+            "modules": [
+                "pulseaudio",
+                "pulseaudio#mic",
+                "pulseaudio/slider"
+            ]
+        },
+
+            // ----- SUBGOUP AUDIO MODULES -----
+            "pulseaudio": {
+                "format": "{icon}",
+                "format-bluetooth": "{icon}",
+                "tooltip-format": "{volume}% {icon} | {desc}",
+                "format-muted": "󰖁",
+                "format-icons": {
+                    "headphones": "󰋌",
+                    "handsfree": "󰋌",
+                    "headset": "󰋌",
+                    "phone": "",
+                    "portable": "",
+                    "car": " ",
+                    "default": [
+                        "󰕿",
+                        "󰖀",
+                        "󰕾"
+                    ]
+                },
+                "on-click": "volume mute",
+                "on-click-middle": "pavucontrol",
+                "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+                "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+                "smooth-scrolling-threshold": 1
+            },
+            
+            "pulseaudio#mic": {
+                "format": "{format_source}",
+                "format-source": "",
+                "format-source-muted": "",
+                "tooltip-format": "{volume}% {format_source} ",
+                "on-click": "pactl set-source-mute 0 toggle",
+                "on-scroll-down": "pactl set-source-volume 0 -1%",
+                "on-scroll-up": "pactl set-source-volume 0 +1%"
+            },
+            
+            "pulseaudio/slider": {
+                "min": 0,
+                "max": 140,
+                "orientation": "vertical"
+            },
+        
+        "custom/notifications": {
+            "format": "<b>{}</b> ",
+            "exec": "noti-cycle -j",
+            "on-click": "noti-cycle",
+            "on-click-right": "noti-cycle rofi",
+            "return-type": "json",
+            "interval": "once",
+            "signal": 2
+        },
+
+    "group/connection": {
+        "orientation": "inherit",
+        "modules": [
+            "custom/hotspot",
+            "group/network",
+            "group/bluetooth"
+        ]
+    },
+
+        // -------- GROUP CONNECTION MODULES --------
+        "custom/hotspot": {
+            "format": "{} ",
+            "exec": "~/.config/waybar/bin/hotspot",
+            "return-type": "json",
+            "on-click": "hash wihotspot && wihotspot",
+            "interval": 5
+        },
+
+        "group/network": {
+            "orientation": "inherit",
+            "drawer": {
+                "transition-duration": 500,
+                "transition-left-to-right": true
+            },
+            "modules": [
+                "network",
+                "network#speed"
+            ]
+        },
+
+            // ----- SUBGROUP NETWORK MODULES -----
+            "network": {
+                "format": "{icon}",
+                "format-icons": {
+                    "wifi": ["󰤨"],
+                    "ethernet": ["󰈀"],
+                    "disconnected": ["󰖪"]
+                },
+                "format-wifi": "󰤨",
+                "format-ethernet": "󰈀",
+                "format-disconnected": "󰖪",
+                "format-linked": "󰈁",
+                "tooltip": false,
+                "on-click": "pgrep -x rofi &>/dev/null && notify-send rofi || networkmanager_dmenu"
+            },
+
+            "network#speed": {
+                "format": " {bandwidthDownBits} ",
+                "rotate": 90,
+                "interval": 5,
+                "tooltip-format": "{ipaddr}",
+                "tooltip-format-wifi": "{essid} ({signalStrength}%)   \n{ipaddr} | {frequency} MHz{icon} ",
+                "tooltip-format-ethernet": "{ifname} 󰈀 \n{ipaddr} | {frequency} MHz{icon} ",
+                "tooltip-format-disconnected": "Not Connected to any type of Network",
+                "tooltip": true,
+                "on-click": "pgrep -x rofi &>/dev/null && notify-send rofi || networkmanager_dmenu"
+            },
+
+        // "group/bluetooth": {
+        //     "orientation": "inherit",
+        //     "drawer": {
+        //         "transition-duration": 500,
+        //         "transition-left-to-right": true
+        //     },
+        //     "modules": [
+        //         "bluetooth",
+        //         "bluetooth#status"
+        //     ]
+        // },
+
+            // ----- SUBGROUP BLUETOOTH MODULES -----
+            // "bluetooth": {
+            //     "format-on": "",
+            //     "format-off": "󰂲",
+            //     "format-disabled": "",
+            //     "format-connected": "<b></b>",
+            //     "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+            //     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+            //     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+            //     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+            //     "on-click": "rofi-bluetooth -config ~/.config/rofi/menu.d/network.rasi -i"
+            // },
+
+            // "bluetooth#status": {
+            //     "format-on": "",
+            //     "format-off": "",
+            //     "format-disabled": "",
+            //     "format-connected": "<b>{num_connections}</b>",
+            //     "format-connected-battery": "<small><b>{device_battery_percentage}%</b></small>",
+            //     "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+            //     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+            //     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+            //     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+            //     "on-click": "rofi-bluetooth -config ~/.config/rofi/menu.d/network.rasi -i"
+            // },
+
+
+    "group/together": {
+        "orientation": "inherit",
+        "modules": [
+            "group/utils",
+            "clock"
+        ]
+    },
+        // -------- GROUP TOGETHER MODULES --------
+        "group/utils": {
+            "orientation": "inherit",
+            "drawer": {
+                "transition-duration": 500,
+                "transition-left-to-right": true
+            },
+            "modules": [
+                "custom/mark",
+                "custom/weather",
+                "custom/colorpicker",
+                "custom/hyprshade",
+                "idle_inhibitor",
+                "custom/hyprkill"
+            ]
+        },
+
+            // ----- SUBGROUP UTILS MODULES -----
+            "custom/mark": {
+                "format": "{:3}",
+                "tooltip": false
+            },
+
+            "custom/weather": {
+                "format": "{}",
+                "tooltip": true,
+                "interval": 1800,
+                "exec": "wttrbar --custom-indicator '{ICON}\n<b>{temp_C}</b>' --location noida",
+                "return-type": "json"
+            },
+
+            "custom/colorpicker": {
+                "format": "{}",
+                "return-type": "json",
+                "interval": "once",
+                "exec": "colorpicker -j",
+                "on-click": "sleep 1 && colorpicker",
+                "signal": 1
+            },
+            
+            "custom/hyprshade": {
+                "format": "{}",
+                "tooltip": true,
+                "signal": 11,
+                "exec": "toggle-hyprshade status",
+                "on-click": "toggle-hyprshade",
+                "return-type": "json"
+            },
+            
+            "idle_inhibitor": {
+                "format": "{icon}",
+                "tooltip-format-activated": "Idle Inhibitor is active",
+                "tooltip-format-deactivated": "Idle Inhibitor is not active",
+                "format-icons": {
+                    "activated": "󰔡",
+                    "deactivated": "󰔢"
+                }
+            },
+            
+            "custom/hyprkill": {
+                "format": "{}",
+                "interval": "once",
+                "exec": "echo '󰅙\nKill clients using hyrpctl kill'",
+                "on-click": "sleep 1 && hyprctl kill"
+            },
+        
+        "clock": {
+            "format": "{:%H\n%M}",
+            "tooltip-format": "<tt><small>{calendar}</small></tt>",
+            "calendar": {
+                "mode": "month",
+                "mode-mon-col": 3,
+                "weeks-pos": "right",
+                "on-scroll": 1,
+                "on-click-right": "mode",
+                "format": {
+                    "today": "<span color='#a6e3a1'><b><u>{}</u></b></span>"
+                }
+            },
+            "format-alt": "{:%d\n%m\n%y}"
+        },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 10
+    },
+
+    "group/power": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "battery",
+            "power-profiles-daemon"
+        ]
+    },
+
+        // -------- GROUP BATTERY MODULES --------
+        "battery": {
+            "rotate": 270,
+            "states": {
+                "good": 95,
+                "warning": 30,
+                "critical": 15
+            },
+            "format": "{icon}",
+            "format-charging": "<b>{icon} </b>",
+            "format-full": "<span color='#82A55F'><b>{icon}</b></span>",
+            "format-icons": [
+                "󰁻",
+                "󰁼",
+                "󰁾",
+                "󰂀",
+                "󰂂",
+                "󰁹"
+            ],
+            "tooltip-format": "{timeTo} {capacity} % | {power} W"
+        },
+
+        "power-profiles-daemon": {
+            "format": "{icon}",
+            "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+            "tooltip": true,
+            "format-icons": {
+                "default": "",
+                "performance": "<span color='#B37F34'><small></small></span>",
+                "balanced": "<span><small> </small></span>",
+                "power-saver": "<span color='#a6e3a1'><small></small></span>"
+            }
+        }
 }
